@@ -5,8 +5,10 @@
 void testArrays();
 int testHeap();
 void testString();
+void increment(int* pa);
 
 int main(int argc, char *argv[]) {
+/*
   if (argc != 3) {
     printf("Provide two inputs\n");
     return 1;
@@ -23,7 +25,11 @@ int main(int argc, char *argv[]) {
   }
  
   testString();
+*/
   
+  int a = 10;
+  increment(&a); 
+ 
   return 0;
 }
 
@@ -80,3 +86,8 @@ void testString() {
   free(chars);
 }
 
+void increment(int* pa) {
+  printf("%p:%d\n", pa, *pa);
+  *pa = *pa + 1; 
+  printf("%p:%d\n", pa, *pa);
+}
