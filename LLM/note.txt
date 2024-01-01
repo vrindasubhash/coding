@@ -1,0 +1,5 @@
+python -m venv .venv  # creating python vitrual environment called .venv
+source ./.venv/bin/activate
+pip install -r ./requirements.txt
+pip install notebook
+jupyter notebook 
