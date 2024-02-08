@@ -1,14 +1,18 @@
-#import <stdio.h>
+//#import <stdio.h>
 
-#define PRINT_INT(x) printf(#x" %d\n", x)
+
+void abc(char* s, int i){}
+
+
+#define PRINT_INT(x) abc(#x" %d\n", x)
 
 int main() {
 
   int a = 10;
   int b = 25;
 
-  printf("a %d\n", a);
-  printf("b %d\n", b);
+  abc("a %d\n", a);
+  abc("b %d\n", b);
 
   // Equivalent using a macro
   PRINT_INT(a); // --> printf("a"" %d\n", a)
