@@ -6,4 +6,4 @@ gcc -o "${FILE_NAME}" "./${FILE_NAME}.c"
 
 "./${FILE_NAME}"
 
-echo $?
+#echo $?
