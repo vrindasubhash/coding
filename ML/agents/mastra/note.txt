@@ -1,0 +1,13 @@
+guide: https://mastra.ai/en/guides/guide/ai-recruiter
+
+# Node 20+ recommended
+npm create mastra@latest my-agent
+cd my-agent
+
+# add an LLM provider (OpenAI shown here)
+npm i @ai-sdk/openai
+
+# create .env with openAI key
+
+# To run test
+  npx tsx src/test-agent.ts
