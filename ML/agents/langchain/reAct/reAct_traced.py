@@ -140,6 +140,8 @@ Return:
 if __name__ == "__main__":
     question = "Which is greater: 2589113 * 7894 or 1894628 * 3581? or 199928 * 29991"
 
+    """
+    # enable for tracing
     # 1) Show a visible PLAN (reasoning before acting)
     plan = make_plan(question)
 
@@ -152,6 +154,7 @@ if __name__ == "__main__":
         print("\nAssumptions:", "; ".join(plan.assumptions))
     if plan.risks:
         print("Risks:", "; ".join(plan.risks))
+    """
 
     # 2) Execute with the ReAct agent
     print("\n=== EXECUTION (tool trace) ===")
