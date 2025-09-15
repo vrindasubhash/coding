@@ -19,23 +19,43 @@ def verify_product(a: float, b: float) -> str:
     """Recompute the product to verify the prior result; returns a short message."""
     return f"Verified: {a*b}"
 
+def compare_two(a: float, b: float) -> str:
+    """
+    Compare two numbers and return which one is greater, or if they are equal.
+    """
+    if a > b:
+        return f"{a} is greater than {b}"
+    elif a < b:
+        return f"{b} is greater than {a}"
+    else:
+        return f"{a} and {b} are equal"
+
+
 multiply_tool = FunctionTool.from_defaults(
     fn=multiply, name="multiply", description="Multiply two numbers."
 )
+
 verify_tool = FunctionTool.from_defaults(
     fn=verify_product, name="verify_product",
     description="Recompute the product to confirm the result."
 )
 
+compare_two_tool = FunctionTool.from_defaults(
+    fn=compare_two,
+    name="compare_two",
+    description="Compare two numbers and return which one is greater or if they are equal."
+)
+
 # ========= Agent =========
 llm = OpenAI(model="gpt-4o-mini", temperature=0)
-agent = ReActAgent(tools=[multiply_tool, verify_tool], llm=llm)
+agent = ReActAgent(tools=[multiply_tool, verify_tool, compare_two_tool], llm=llm)
 ctx = Context(agent)  # maintain state/history across steps
 
 async def main():
     # Nudge the agent to be thorough, but don't force a fixed number of steps.
     q = (
-        "Compute 1234 * 4567. If helpful, call tools and verify before answering. "
+        #"Compute 1234 * 4567. If helpful, call tools and verify before answering. "
+        "Which is bigger: 123 * 431, 801 * 45, or 391 * 101?"
         "Be thorough and only give the final answer after you’re confident."
     )
 
