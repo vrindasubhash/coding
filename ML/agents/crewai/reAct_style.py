@@ -51,11 +51,11 @@ judge = Agent(
 )
 
 # ========= Task =========
+question = "Which is greater: 2589113 * 7894 or 1894628 * 3581? or 199928 * 29991"
+
 task = Task(
     description=(
-        "Decide which expression is greater: 1234*567 or 3456*78. "
-        "You MUST use tools for all arithmetic and comparison. "
-        f"{react_policy}"
+        f"{question} You MUST use tools for all arithmetic and comparison. {react_policy}"
     ),
     agent=judge,
     expected_output=(

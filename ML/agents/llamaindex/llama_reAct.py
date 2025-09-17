@@ -52,15 +52,11 @@ agent = ReActAgent(tools=[multiply_tool, verify_tool, compare_two_tool], llm=llm
 ctx = Context(agent)  # maintain state/history across steps
 
 async def main():
-    # Nudge the agent to be thorough, but don't force a fixed number of steps.
-    q = (
-        #"Compute 1234 * 4567. If helpful, call tools and verify before answering. "
-        "Which is bigger: 123 * 431, 801 * 45, or 391 * 101?"
-        "Be thorough and only give the final answer after you’re confident."
-    )
+    # Use the standardized question
+    question = "Which is greater: 2589113 * 7894 or 1894628 * 3581? or 199928 * 29991. Be thorough and only given the final answer once you are confident."
 
-    # Start the run; do NOT pass max_iterations (no artificial cap).
-    handler = agent.run(q, ctx=ctx)
+    # Run the agent with the standardized question
+    handler = agent.run(question, ctx=ctx)
 
     # Stream events as they happen:
     async for ev in handler.stream_events():

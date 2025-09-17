@@ -13,3 +13,5 @@ wheels/
 # Mastra runtime DB
 mastra.db
 *.db
+
+.DS_Store
