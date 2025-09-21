@@ -1,0 +1,22 @@
+image is finished 
+dockerfile describes how to create the image (can start with an existing image)
+container is running it
+
+dockerhub is like github for images
+
+build the image (need a file called "Dockerfile" for this to work 
+  docker build -t myapp .
+
+Dockerfiles - specify what goes into an image
+
+check if its built
+  docker images
+
+running the container
+  docker run -it --name myappcontainer myapp
+  myappcontainer is a name you can give for the container
+  myapp is the name of the image
+
+
+
+
