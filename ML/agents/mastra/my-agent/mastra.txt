@@ -1,0 +1,23 @@
+[33mWARN[39m [2025-09-24 22:46:30.630 -0400] (Mastra): [36mIf you are using a custom instrumentation file or want to disable this warning, set the globalThis.___MASTRA_TELEMETRY___ variable to true in your instrumentation file.[39m
+[test-diagram] Starting test-diagram.ts
+[test-diagram] Retrieved agent: { name: 'diagrammer', tools: undefined }
+[test-diagram] Prompt sent to agent:
+ 
+You are the diagrammer agent.
+Task: produce a flowchart for the signup flow below.
+User enters email -> System sends verification code -> If valid -> create account; else -> show error
+
+CRITICAL: You MUST call the mermaid-diagram tool. Do not answer in plain text.
+Return only the tool output.
+
+[33mWARN[39m [2025-09-24 22:46:30.637 -0400] (Mastra): [36mThe tools property is deprecated. Please use getTools() instead.[39m
+[33mWARN[39m [2025-09-24 22:46:30.638 -0400] (Mastra): [36mDeprecation NOTICE:
+Generate method will switch to use generateVNext implementation September 23rd, 2025. Please use generateLegacy if you don't want to upgrade just yet.[39m
+[test-diagram] Raw response summary: {
+  text: '',
+  tool: undefined,
+  result: undefined,
+  choices: undefined,x
+  messages: undefined
+}
+[test-diagram] Parsed tool wrapper: { toolWrapper: undefined, toolId: '', hasMermaid: false }
