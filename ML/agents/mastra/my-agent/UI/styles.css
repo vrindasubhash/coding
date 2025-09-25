@@ -1,0 +1,58 @@
+* { box-sizing: border-box; }
+body { font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial; margin: 0; padding: 0; color: #111; background: #f7fafc; }
+header { background: #0f172a; color: #fff; padding: 18px 24px; }
+header h1 { margin: 0; font-size: 18px; }
+main { display: flex; gap: 20px; padding: 20px; }
+.controls { width: 420px; background: #fff; padding: 16px; border-radius: 8px; box-shadow: 0 6px 18px rgba(2,6,23,0.06); }
+.controls label { display: inline-flex; gap: 8px; align-items: center; margin-right: 8px; }
+.prompt-area { margin-top: 12px; }
+.prompt-header { display:flex; justify-content:space-between; align-items:center; }
+#prompt { width: 100%; font-family: inherit; padding: 8px; border: 1px solid #e6edf3; border-radius: 6px; }
+.preview { background: #0b1220; color: #e6f0ff; padding: 10px; border-radius: 6px; max-height: 160px; overflow: auto; }
+.actions { margin-top: 12px; display:flex; gap: 12px; align-items:center; }
+.actions button { padding: 8px 12px; border-radius: 6px; border: none; background: #0f172a; color: white; cursor: pointer; }
+.output { flex: 1; background: #fff; padding: 16px; border-radius: 8px; box-shadow: 0 6px 18px rgba(2,6,23,0.06); }
+.result { white-space: pre-wrap; font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, "Roboto Mono", "Courier New", monospace; color: #0b1220; }
+footer { padding: 12px 20px; font-size: 12px; color: #475569; }
+button.secondary { background: #e6edf3; color: #0b1220; }
+.small { font-size: 12px; color: #64748b; }
+.download { margin-top: 8px; display:inline-block; }
+
+/* utility to hide preview panes when they are not relevant */
+.hidden { display: none !important; }
+
+/* ensure preview boxes have a minimal visual area and a subtle empty/loading state */
+.viz { min-height: 120px; display: flex; align-items: center; justify-content: center; }
+.viz .preview-empty { color: #94a3b8; font-style: italic; padding: 12px; }
+
+/* Mode selection layout - stack radio options vertically and align */
+.mode-select {
+  margin-bottom: 12px;
+}
+.mode-label {
+  display: block;
+  font-weight: 600;
+  margin-bottom: 6px;
+  color: #0b1220;
+}
+.modes {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.modes label {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  margin-right: 0; /* override .controls label margin-right */
+}
+.modes input[type="radio"] {
+  margin: 0; /* tidy up spacing handled by gap */
+}
+
+/* small helper for preview-empty messages */
+.preview-empty {
+  color: #64748b;
+  padding: 12px;
+  font-size: 14px;
+}

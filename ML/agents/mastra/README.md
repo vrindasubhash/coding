@@ -21,15 +21,11 @@ Quick start
    or
    npx tsx src/test-agent.ts
 
-New: Wireframe outputs
-
-- The project now includes two wireframe tools and tests:
-  - Excalidraw wireframe: src/mastra/tools/wireframe-excalidraw.tool.ts (test: src/test-wireframe.ts)
-  - Figma payload wireframe: src/mastra/tools/wireframe-figma.tool.ts (test: src/test-wireframe-figma.ts)
 
 Quick run (from my-agent/):
   - npx tsx src/test-wireframe.ts        # writes wireframe.excalidraw.json
   - npx tsx src/test-wireframe-figma.ts  # writes wireframe.figma.json
+  - npx tsx src/test-diagram.ts # mermaid diagram   
 
 Notes
 

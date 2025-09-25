@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Mastra Diagram & Wireframe UI</title>
+  <link rel="stylesheet" href="/styles.css" />
+</head>
+<body>
+  <header>
+    <h1>Mastra Diagram & Wireframe</h1>
+  </header>
+
+  <main>
+    <section class="controls">
+      <div class="mode-select">
+        <div class="mode-label">Mode:</div>
+        <div class="modes">
+          <label><input type="radio" name="mode" value="mermaid" checked /> Mermaid (diagram)</label>
+          <label><input type="radio" name="mode" value="excalidraw" /> Excalidraw (wireframe)</label>
+          <label><input type="radio" name="mode" value="figma" /> Figma (wireframe)</label>
+        </div>
+      </div>
+
+      <div class="prompt-area">
+        <div class="prompt-header">
+          <strong>Prompt</strong>
+          <button id="editToggle">Edit</button>
+        </div>
+        <textarea id="prompt" rows="6"></textarea>
+        <div class="prompt-preview">
+          <label>Rendered prompt (what will be sent)</label>
+          <pre id="promptPreview" class="preview"></pre>
+        </div>
+      </div>
+
+      <div class="actions">
+        <button id="generate">Generate</button>
+        <span id="status"></span>
+      </div>
+    </section>
+
+    <section class="output">
+      <h2>Output</h2>
+      <div id="result" class="result"></div>
+
+      <!-- Preview panes -->
+      <div class="previews">
+        <div class="preview-pane" data-mode="mermaid">
+          <h3>Mermaid Preview</h3>
+          <div id="mermaidPreview" class="viz"></div>
+        </div>
+        <div class="preview-pane hidden" data-mode="excalidraw">
+          <h3>Excalidraw Preview</h3>
+          <div id="excalidrawPreview" class="viz"></div>
+        </div>
+        <div class="preview-pane hidden" data-mode="figma">
+          <h3>Figma-like Preview</h3>
+          <div id="figmaPreview" class="viz"></div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <small>Server must be running (run: npm run ui from my-agent/). Produces diagram.mmd / wireframe JSON via Mastra agents/tools.</small>
+  </footer>
+
+  <!-- mermaid client for rendering diagrams in-browser -->
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+  <script src="/app.js"></script>
+</body>
+</html>
