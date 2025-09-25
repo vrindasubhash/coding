@@ -14,6 +14,7 @@ High-level architecture
 - Tools: my-agent/src/mastra/tools
   - Lightweight, focused utilities that agents call to perform specific tasks (rendering, fetching, I/O).
   - Examples: mermaid-diagram.tool.ts, weather-tool.ts, wireframe-excalidraw.tool.ts
+  - New: wireframe-figma.tool.ts — produces a Figma-compatible JSON payload (payload-only; does not call Figma API).
 - Workflows: my-agent/src/mastra/workflows
   - Higher-level orchestrations that compose multiple tools and agents for a use case.
   - Example: weather-workflow.ts
@@ -45,6 +46,11 @@ Component responsibilities
   - Compose agents and tools to implement user-facing flows. Keep them declarative and orchestrating only.
 - Tests
   - Use the small scripts in src/ to validate behavior and provide runnable examples.
+Tests
+- Use the small scripts in src/ to validate behavior and provide runnable examples.
+- There are now separate wireframe tests:
+  - src/test-wireframe.ts           — generates Excalidraw JSON (wireframe.excalidraw.json)
+  - src/test-wireframe-figma.ts     — generates a Figma payload JSON (wireframe.figma.json)
 
 How to extend
 
@@ -71,6 +77,10 @@ Development notes
   - tsc --project tsconfig.json (adjust path if tsconfig is in my-agent/)
 - Run example/test scripts
   - node dist/path/to/test-agent.js or run via ts-node in development
+
+Quick demo (from my-agent/):
+  - npx tsx src/test-wireframe.ts        # writes wireframe.excalidraw.json
+  - npx tsx src/test-wireframe-figma.ts  # writes wireframe.figma.json
 
 Best practices and conventions
 

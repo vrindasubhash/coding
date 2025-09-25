@@ -120,8 +120,17 @@ Return only the tool output.
       if (/^_\d+$/.test(m)) {
         try {
           const toolsMap = await diagrammer.getTools?.() ?? (diagrammer as any).tools;
-          const idx = String(Number(m.slice(1)));
-          const mapped = toolsMap?.[idx];
+          // Normalize index to a number and handle both array and object shapes safely
+          const idx = Number(m.slice(1));
+          let mapped: any;
+          if (Array.isArray(toolsMap)) {
+            mapped = toolsMap[idx];
+          } else if (toolsMap && typeof toolsMap === "object") {
+            // some implementations expose an object map; try numeric key and string key
+            mapped = (toolsMap as any)[String(idx)] ?? (toolsMap as any)[idx];
+          } else {
+            mapped = undefined;
+          }
           if (mapped) toolId = (mapped as any).id ?? (mapped as any).name ?? toolId;
         } catch (e) {
           // ignore resolution errors
@@ -140,10 +149,11 @@ Return only the tool output.
     console.error("[agent] No tool output. Full result:", JSON.stringify(res, null, 2));
     throw new Error("Agent responded without a tool payload even though toolChoice='required'.");
   }
-  if (!/mermaid-diagram/i.test(toolId)) {
-    // Optional guard: ensure it used the mermaid tool (not the wireframe tool)
+  // Accept several naming variants from tool wrappers (e.g. "mermaid-diagram", "MermaidDiagramTool").
+  // Check for the 'mermaid' substring case-insensitively rather than a single exact form.
+  if (!/mermaid/i.test(toolId)) {
     console.error("[agent] Wrong tool used:", toolId);
-    throw new Error("Agent called the wrong tool; expected mermaid-diagram.");
+    throw new Error("Agent called the wrong tool; expected a mermaid diagram tool.");
   }
 
   writeFileSync("diagram.mmd", String(mermaid));

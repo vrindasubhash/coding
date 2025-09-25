@@ -16,10 +16,20 @@ Quick start
    npm install
 3. Build / typecheck (if TypeScript is used):
    npx tsc --project tsconfig.json
-4. Run example scripts (after build or using ts-node):
+4. Run example scripts (after build or using tsx):
    node dist/path/to/test-agent.js
    or
-   npx ts-node src/test-agent.ts
+   npx tsx src/test-agent.ts
+
+New: Wireframe outputs
+
+- The project now includes two wireframe tools and tests:
+  - Excalidraw wireframe: src/mastra/tools/wireframe-excalidraw.tool.ts (test: src/test-wireframe.ts)
+  - Figma payload wireframe: src/mastra/tools/wireframe-figma.tool.ts (test: src/test-wireframe-figma.ts)
+
+Quick run (from my-agent/):
+  - npx tsx src/test-wireframe.ts        # writes wireframe.excalidraw.json
+  - npx tsx src/test-wireframe-figma.ts  # writes wireframe.figma.json
 
 Notes
 
@@ -30,4 +40,5 @@ Next steps
 
 - Add tests for any new agent or tool.
 - Register new agents in my-agent/src/mastra/index.ts so they are discoverable by workflows and examples.
+- If you want a single demo that runs both wireframe generators and packages outputs, I can add a short script to do that.
 
