@@ -30,6 +30,8 @@ async function handleApiGenerate(req: any, res: any) {
     const mode = json.mode || 'mermaid';
     const prompt = json.prompt || '';
 
+    console.log("[UI-Server] Prompt sent to agent:", prompt);
+
     // Helper to clean up common wrappers around mermaid outputs
     function sanitizeMermaidSource(src: string | undefined) {
       if (!src) return src;
@@ -47,9 +49,9 @@ async function handleApiGenerate(req: any, res: any) {
     let agentRes: any = undefined;
     try {
       agentRes = await agent.generate([{ role: 'user', content: prompt }], { toolChoice: 'required', temperature: 0 });
+      console.log("[UI-Server] Response from agent:", agentRes);
     } catch (e) {
-      // ignore - fallback to direct tool calls below
-      console.warn('agent.generate failed, falling back to direct tool', e);
+      console.error("[UI-Server] Agent generate call failed:", e);
     }
 
     let mermaid: string | undefined = undefined;
@@ -158,14 +160,26 @@ async function handleApiGenerate(req: any, res: any) {
       }
     }
 
+    const cache = new Map<string, string>(); // Cache to store results
+
     // If not present, call the appropriate tool directly as fallback for the selected mode
     if (mode === 'mermaid' && !mermaid) {
-      try {
-        const direct: any = await MermaidDiagramTool.execute({ args: { kind: 'flowchart', context: prompt } } as any);
-        mermaid = direct?.mermaid ?? direct?.output?.mermaid ?? undefined;
-        if (mermaid) mermaid = sanitizeMermaidSource(mermaid);
-      } catch (e) {
-        console.error('Mermaid tool failed', e);
+      const cacheKey = `${mode}-${prompt}`;
+      if (cache.has(cacheKey)) {
+        mermaid = cache.get(cacheKey);
+      } else {
+        try {
+          const direct: any = await MermaidDiagramTool.execute({ args: { kind: 'flowchart', context: prompt } } as any);
+          mermaid = direct?.mermaid ?? direct?.output?.mermaid ?? undefined;
+          if (mermaid) {
+            mermaid = sanitizeMermaidSource(mermaid);
+            cache.set(cacheKey, mermaid); // Store result in cache
+          } else {
+            console.warn('Mermaid diagram generation returned undefined.');
+          }
+        } catch (e) {
+          console.error('Mermaid tool failed', e);
+        }
       }
     }
 

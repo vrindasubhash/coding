@@ -22,6 +22,12 @@ export const MermaidDiagramTool = createTool({
   // Make execute resilient to different payload shapes
   execute: async (...anyArgs) => {
     const payload = (anyArgs && anyArgs[0]) || {};
+    const runId = (payload as any)?.runId || "unknown-run";
+    console.log(`[MermaidDiagramTool][${runId}] Received payload with context:`, {
+      kind: (payload as any)?.args?.kind || (payload as any)?.input?.kind || (payload as any)?.inputData?.kind || "flowchart",
+      context: ((payload as any)?.args?.context || (payload as any)?.input?.context || (payload as any)?.inputData?.context || "").slice(0, 100)
+    });
+
     const data =
       (payload as any).args ??
       (payload as any).input ??
@@ -30,20 +36,29 @@ export const MermaidDiagramTool = createTool({
 
     const kind: "flowchart" | "sequence" | "er" | "user-journey" =
       (data && (data as any).kind) || "flowchart";
-    const context: string = String((data && (data as any).context) || "");
+    const context: string =
+      typeof data.context === "string"
+        ? data.context
+        : typeof data.context === "object" && data.context !== null
+        ? typeof data.context.context === "string"
+          ? data.context.context
+          : JSON.stringify(data.context)
+        : "";
+
+    console.log(`[MermaidDiagramTool][${runId}] Processing request for kind:`, kind);
 
     let mermaid = "";
 
     if (kind === "flowchart") {
-      mermaid = [
-        "flowchart TD",
-        "A[Start] --> B{Decide}",
-        "B -->|Yes| C[Do thing]",
-        "B -->|No| D[Other path]",
-        "C --> E[End]",
-        "D --> E[End]",
-      ].join("\n");
+      // Dynamically generate flowchart based on context
+      const steps = context.split("->").map((step) => step.trim());
+      const mermaidLines = ["flowchart TD"];
+      for (let i = 0; i < steps.length - 1; i++) {
+        mermaidLines.push(`step${i}[${steps[i]}] --> step${i + 1}[${steps[i + 1]}]`);
+      }
+      mermaid = mermaidLines.join("\n");
     } else if (kind === "sequence") {
+      // Example: Add dynamic sequence diagram generation logic here
       mermaid = [
         "sequenceDiagram",
         "participant U as User",
@@ -52,6 +67,7 @@ export const MermaidDiagramTool = createTool({
         "S-->>U: Response",
       ].join("\n");
     } else if (kind === "er") {
+      // Example: Add dynamic ER diagram generation logic here
       mermaid = [
         "erDiagram",
         "USER ||--o{ ORDER : places",
@@ -66,6 +82,7 @@ export const MermaidDiagramTool = createTool({
         "}",
       ].join("\n");
     } else {
+      // Example: Add dynamic user journey generation logic here
       mermaid = [
         "journey",
         "title Sample user journey",
@@ -78,6 +95,8 @@ export const MermaidDiagramTool = createTool({
         "Invites team: 3: User",
       ].join("\n");
     }
+
+    console.log("[MermaidDiagramTool] Generated mermaid diagram:", mermaid);
 
     return {
       mermaid,
