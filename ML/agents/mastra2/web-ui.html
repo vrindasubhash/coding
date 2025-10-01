@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mermaid Diagram Generator</title>
+    <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            background: white;
+            border-radius: 10px;
+            padding: 30px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #333;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .input-section {
+            margin-bottom: 30px;
+        }
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #555;
+        }
+        textarea {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 6px;
+            font-size: 16px;
+            resize: vertical;
+            min-height: 100px;
+            box-sizing: border-box;
+        }
+        button {
+            background: #007acc;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 6px;
+            font-size: 16px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+        button:hover {
+            background: #005a9e;
+        }
+        button:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+        .diagram-section {
+            margin-top: 30px;
+            padding: 20px;
+            border: 2px dashed #ddd;
+            border-radius: 6px;
+            background: #fafafa;
+            min-height: 200px;
+        }
+        .diagram-container {
+            text-align: center;
+            background: white;
+            padding: 20px;
+            border-radius: 6px;
+            margin-top: 15px;
+        }
+        .loading {
+            color: #666;
+            font-style: italic;
+        }
+        .error {
+            color: #d32f2f;
+            background: #ffebee;
+            padding: 10px;
+            border-radius: 4px;
+            margin-top: 10px;
+        }
+        .success {
+            color: #388e3c;
+            background: #e8f5e8;
+            padding: 10px;
+            border-radius: 4px;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎨 Mermaid Diagram Generator</h1>
+        
+        <div class="input-section">
+            <label for="diagramRequest">What diagram would you like to create?</label>
+            <textarea 
+                id="diagramRequest" 
+                placeholder="e.g., Create a flowchart for user login process, or Design a system architecture diagram for an e-commerce app"
+            ></textarea>
+            <button onclick="generateDiagram()" id="generateBtn">Generate Diagram</button>
+        </div>
+
+        <div class="diagram-section">
+            <h3>Generated Diagram:</h3>
+            <div id="status"></div>
+            <div id="diagramContainer" class="diagram-container" style="display:none;">
+                <div id="mermaidDiagram"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Initialize Mermaid
+        mermaid.initialize({ 
+            startOnLoad: false,
+            theme: 'default',
+            securityLevel: 'loose'
+        });
+
+        async function generateDiagram() {
+            const request = document.getElementById('diagramRequest').value.trim();
+            const statusDiv = document.getElementById('status');
+            const diagramContainer = document.getElementById('diagramContainer');
+            const generateBtn = document.getElementById('generateBtn');
+            
+            if (!request) {
+                statusDiv.innerHTML = '<div class="error">Please enter a diagram request</div>';
+                return;
+            }
+
+            // Show loading state
+            generateBtn.disabled = true;
+            generateBtn.textContent = 'Generating...';
+            statusDiv.innerHTML = '<div class="loading">🤖 Generating your diagram...</div>';
+            diagramContainer.style.display = 'none';
+
+            try {
+                // Call the backend API
+                const response = await fetch('/api/generate-diagram', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ request: request })
+                });
+
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+
+                const data = await response.json();
+                
+                if (data.success && data.mermaidCode) {
+                    // Clear previous diagram
+                    const diagramDiv = document.getElementById('mermaidDiagram');
+                    diagramDiv.innerHTML = '';
+                    
+                    // Generate unique ID for this diagram
+                    const diagramId = 'diagram-' + Date.now();
+                    
+                    // Render the mermaid diagram
+                    const { svg } = await mermaid.render(diagramId, data.mermaidCode);
+                    diagramDiv.innerHTML = svg;
+                    
+                    // Show success and diagram
+                    statusDiv.innerHTML = '<div class="success">✅ Diagram generated successfully!</div>';
+                    diagramContainer.style.display = 'block';
+                } else {
+                    throw new Error(data.error || 'Failed to generate diagram');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                statusDiv.innerHTML = `<div class="error">❌ Error: ${error.message}</div>`;
+                diagramContainer.style.display = 'none';
+            } finally {
+                // Reset button
+                generateBtn.disabled = false;
+                generateBtn.textContent = 'Generate Diagram';
+            }
+        }
+
+        // Allow Enter key to generate diagram
+        document.getElementById('diagramRequest').addEventListener('keydown', function(event) {
+            if (event.key === 'Enter' && event.ctrlKey) {
+                generateDiagram();
+            }
+        });
+    </script>
+</body>
+</html>
