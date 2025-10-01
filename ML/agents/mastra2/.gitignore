@@ -49,6 +49,9 @@ coverage/
 *.lcov
 
 # Temporary folders
+
+# Artifacts - generated diagrams and context files
+artifacts/
 tmp/
 temp/
 

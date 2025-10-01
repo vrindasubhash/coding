@@ -1,11 +1,13 @@
 //mastra2/index.ts
 import { Mastra } from "@mastra/core";
 import { helloAgent } from "./agents/helloAgent";
-import { hello } from "./tools/hello";
+import { mermaidAgent } from "./agents/diagrammerAgent";
 
-// Create a Mastra instance and register your agents + tools
+// Create a Mastra instance and register your agents
 export const mastra = new Mastra({
-  agents: [helloAgent],
-  tools: [hello],
+  agents: { 
+    helloAgent,
+    mermaidAgent 
+  },
 });
 
